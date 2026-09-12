@@ -1,1 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forgetful Reminder — Because remembering is overrated</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔔</text></svg>">
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="animations.css">
+</head>
+<body>
 
+  <!-- Toast Notification Center -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <!-- Brand Section -->
+      <div class="brand-section" id="brandHeader">
+        <div class="brand-logo-wrap" id="brandLogo" title="Click 5 times for a surprise">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <span class="brand-title">Forgetful Reminder</span>
+          <span class="brand-tagline">Because remembering is overrated.</span>
+        </div>
+      </div>
+
+      <!-- Desktop Navigation Tabs -->
+      <nav class="desktop-nav">
+        <button class="nav-tab active" data-tab="today">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          Today
+        </button>
+        <button class="nav-tab" data-tab="upcoming">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Upcoming
+        </button>
+        <button class="nav-tab" data-tab="completed">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          Completed
+        </button>
+        <button class="nav-tab" data-tab="history">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          Forgotten History
+        </button>
+        <button class="nav-tab" data-tab="stats">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          Stats
+        </button>
+        <button class="nav-tab" data-tab="settings">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          Settings
+        </button>
+      </nav>
+
+      <!-- Header Controls -->
+      <div class="header-actions">
+        <!-- Memory Health Pill -->
+        <div class="memory-health-pill" id="memoryHealthPill" title="Current Neural Memory Health">
+          <span>🧠</span>
+          <span id="headerHealthText">100%</span>
+          <div class="health-dot good" id="headerHealthDot"></div>
+        </div>
+
+        <!-- Audio Mute Button -->
+        <button class="btn-icon" id="btnSoundToggle" title="Toggle Sound Effects">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+        </button>
+
+        <!-- Notification Center Dropdown -->
+        <div class="notif-dropdown-wrapper">
+          <button class="btn-icon" id="btnNotifCenter" title="Notification Center">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span class="notif-badge" id="notifBadge" style="display: none;">0</span>
+          </button>
+          <div class="notif-dropdown" id="notifDropdown">
+            <div class="notif-dropdown-header">
+              <span>Notifications</span>
+              <button class="btn-sm" id="btnClearNotifs" style="color: var(--text-muted); cursor: pointer;">Clear All</button>
+            </div>
+            <div class="notif-dropdown-list" id="notifDropdownList"></div>
+          </div>
+        </div>
+
+        <!-- Quick Demo Button -->
+        <button class="btn btn-demo btn-sm" id="btnDemoHeader" title="Start 10s Demo Mode for Judges">
+          🎤 Demo
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Demo Countdown Banner -->
+  <div id="demoCountdownBanner" style="display: none; background: linear-gradient(90deg, #6366f1, #8b5cf6); color: white; padding: 0.6rem 1.25rem; font-size: 0.9rem; font-weight: 600; text-align: center; justify-content: center; align-items: center; gap: 1rem; box-shadow: var(--shadow-md);">
+    <span>⏱️ Demo reminder firing in <strong id="demoCountdownNumber" style="font-size: 1.15rem; background: rgba(0,0,0,0.25); padding: 0.1rem 0.5rem; border-radius: 4px;">10</strong>s…</span>
+    <button class="btn btn-sm" id="btnTriggerNowDemo" style="background: white; color: var(--primary); font-weight: 700;">
+      ⚡ Trigger Immediately
+    </button>
+  </div>
+
+  <!-- Main Layout -->
+  <main class="main-layout">
+
+    <!-- TAB 1: TODAY (Main Dashboard) -->
+    <section class="tab-pane active" id="tab-today">
+      <div class="dashboard-header">
+        <div class="dashboard-title-group">
+          <h1>Reminders</h1>
+          <p class="dashboard-subtitle" id="todayCountText">3 reminders scheduled</p>
+        </div>
+        <div class="dashboard-actions">
+          <button class="btn btn-emergency" id="btnEmergencyHeader">
+            🚨 EMERGENCY: TRY TO REMEMBER
+          </button>
+          <button class="btn btn-primary" id="btnNewReminderHero">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            + New Reminder
+          </button>
+        </div>
+      </div>
+
+      <!-- Realistic Productivity Banner -->
+      <div class="productivity-summary-banner">
+        <div class="banner-content">
+          <div class="banner-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <div>
+            <div class="banner-text-main" id="todaySummaryText">You have 3 things planned today.</div>
+            <div class="banner-text-sub">Stay focused. The system will handle the remembering.</div>
+          </div>
+        </div>
+        <div class="banner-quick-actions">
+          <span class="priority-badge medium">Today</span>
+        </div>
+      </div>
+
+      <!-- Reminders List -->
+      <div class="reminders-list" id="todayRemindersList"></div>
+    </section>
+
+    <!-- TAB 2: UPCOMING -->
+    <section class="tab-pane" id="tab-upcoming">
+      <div class="dashboard-header">
+        <div class="dashboard-title-group">
+          <h1>Upcoming Reminders</h1>
+          <p class="dashboard-subtitle">Scheduled future tasks</p>
+        </div>
+        <button class="btn btn-primary" id="btnNewReminder">
+          + New Reminder
+        </button>
+      </div>
+      <div class="reminders-list" id="upcomingRemindersList"></div>
+    </section>
+
+    <!-- TAB 3: COMPLETED -->
+    <section class="tab-pane" id="tab-completed">
+      <div class="dashboard-header">
+        <div class="dashboard-title-group">
+          <h1>Completed Tasks</h1>
+          <p class="dashboard-subtitle">Things you somehow managed to finish</p>
+        </div>
+      </div>
+      <div class="reminders-list" id="completedRemindersList"></div>
+    </section>
+
+    <!-- TAB 4: FORGOTTEN HISTORY -->
+    <section class="tab-pane" id="tab-history">
+      <div class="dashboard-header">
+        <div class="dashboard-title-group">
+          <h1>Forgotten History</h1>
+          <p class="dashboard-subtitle">“Unfortunately, even the history doesn't remember.”</p>
+        </div>
+      </div>
+      <div class="reminders-list" id="historyRemindersList"></div>
+    </section>
+
+    <!-- TAB 5: STATISTICS -->
+    <section class="tab-pane" id="tab-stats">
+      <div class="dashboard-header">
+        <div class="dashboard-title-group">
+          <h1>Memory & Productivity Analytics</h1>
+          <p class="dashboard-subtitle">Comprehensive performance metrics</p>
+        </div>
+      </div>
+
+      <!-- Productivity Score Gauge Card -->
+      <div class="productivity-score-card">
+        <div style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted);">
+          Calculated Productivity Score
+        </div>
+        <div class="score-number" id="statProductivityScore">2/100</div>
+        <div style="font-size: 1rem; font-weight: 600; color: var(--text-secondary);">
+          “At least you're consistent.”
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span>Reminders Created</span>
+            <span>📝</span>
+          </div>
+          <div class="stat-value" id="statCreated">27</div>
+          <div class="stat-label">Tasks trusted to memory</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span>Reminders Completed</span>
+            <span>✅</span>
+          </div>
+          <div class="stat-value" id="statCompleted">3</div>
+          <div class="stat-label">Statistically miraculous</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span>Reminders Forgotten</span>
+            <span>❓</span>
+          </div>
+          <div class="stat-value" id="statForgotten" style="color: var(--danger);">24</div>
+          <div class="stat-label">Lost into the void</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span>Memory Success Rate</span>
+            <span>🧠</span>
+          </div>
+          <div class="stat-value" id="statSuccessRate">11%</div>
+          <div class="stat-label">Operating within error tolerance</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span>Most Forgotten Day</span>
+            <span>📅</span>
+          </div>
+          <div class="stat-value" id="statMostForgottenDay" style="font-size: 1.5rem;">Monday</div>
+          <div class="stat-label">Historically cursed</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span>Most Common Status</span>
+            <span>💬</span>
+          </div>
+          <div class="stat-value" id="statMostCommonStatus" style="font-size: 1.35rem;">“I forgot.”</div>
+          <div class="stat-label">Zero explanations provided</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: SETTINGS -->
+    <section class="tab-pane" id="tab-settings">
+      <div class="dashboard-header">
+        <div class="dashboard-title-group">
+          <h1>Settings & Diagnostics</h1>
+          <p class="dashboard-subtitle">Configure your productivity experience</p>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3 class="settings-section-title">Visual & Audio Experience</h3>
+        
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <span class="settings-item-title">Dark Mode</span>
+            <span class="settings-item-desc">High-contrast, sleek slate theme for nighttime forgetting</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="settingThemeSwitch">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <span class="settings-item-title">Sound Effects</span>
+            <span class="settings-item-desc">Synthesizer chimes, thinking ticks, and comedic fail sounds</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="settingSoundSwitch" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3 class="settings-section-title">Comedy & Meme Engine</h3>
+
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <span class="settings-item-title">Meme Mode</span>
+            <span class="settings-item-desc">Enable ridiculous responses: “I forgor 💀”, “Skill issue”, 🗿, 🤡</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="settingMemeSwitch">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="settings-item" style="flex-direction: column; align-items: flex-start;">
+          <div class="settings-item-info" style="margin-bottom: 0.75rem;">
+            <span class="settings-item-title">Memory Strength</span>
+            <span class="settings-item-desc">Adjust the cognitive capacity allocated to retention</span>
+          </div>
+          <div class="range-container">
+            <input type="range" min="0" max="100" value="100" class="range-input" id="settingMemoryStrength">
+            <div class="range-labels">
+              <span>0% (Brain off)</span>
+              <span>50%</span>
+              <span>100% (Maximum Overclock)</span>
+            </div>
+            <div id="memoryStrengthFeedback" style="font-size: 0.85rem; margin-top: 0.4rem;">
+              <strong>Confidence: 100%</strong> <span style="color: var(--danger);">(Actual memory: 3% 😂)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h3 class="settings-section-title">Hackathon Presentation Tools</h3>
+
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <span class="settings-item-title">🎤 10-Second Demo Mode</span>
+            <span class="settings-item-desc">Creates a mock reminder scheduled for 10s into the future for fast presentations</span>
+          </div>
+          <button class="btn btn-demo btn-sm" id="btnDemoSettings">
+            Start Demo Mode
+          </button>
+        </div>
+
+        <div class="settings-item">
+          <div class="settings-item-info">
+            <span class="settings-item-title">Factory Amnesia Reset</span>
+            <span class="settings-item-desc">Wipe all stored reminders and reset memory health</span>
+          </div>
+          <button class="btn btn-danger btn-sm" id="btnResetAllData">
+            Reset Everything
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav">
+    <button class="mobile-nav-item active" data-tab="today">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+      <span>Today</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="upcoming">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+      <span>Upcoming</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="history">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+      <span>History</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="stats">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+      <span>Stats</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="settings">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      <span>Settings</span>
+    </button>
+  </nav>
+
+  <!-- Fake AI Memory Assistant Widget & Floating Button -->
+  <button class="assistant-toggle-btn" id="assistantToggleBtn" title="Ask Memory Assistant">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+  </button>
+
+  <div class="assistant-panel" id="assistantPanel">
+    <div class="assistant-header">
+      <div class="assistant-brand">
+        <span>🤖 Memory Assistant</span>
+        <span class="assistant-badge">v4.2</span>
+      </div>
+      <button class="modal-close-btn" id="assistantCloseBtn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+    <div class="assistant-chat" id="assistantChat"></div>
+    <div class="assistant-quick-prompts">
+      <button class="quick-prompt-btn" data-prompt="What do I have to do today?">What do I have today?</button>
+      <button class="quick-prompt-btn" data-prompt="Remind me about my important task.">Remind my important task</button>
+      <button class="quick-prompt-btn" data-prompt="Can you help me remember?">Help me remember</button>
+    </div>
+    <div class="assistant-input-bar">
+      <input type="text" class="assistant-input" id="assistantInput" placeholder="Ask assistant anything…">
+      <button class="btn btn-primary btn-sm" id="assistantSendBtn" style="border-radius: var(--radius-full); padding: 0.4rem 0.8rem;">
+        Send
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div>Forgetful Reminder — Because remembering is overrated.</div>
+      <div class="footer-joke">Made with questionable engineering decisions. 💀</div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- MODALS & OVERLAYS                                                         -->
+  <!-- ========================================================================= -->
+
+  <!-- 1. Create Reminder Modal -->
+  <div class="modal-overlay" id="createReminderModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          New Reminder
+        </h2>
+        <button class="modal-close-btn" data-modal-close>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <form id="createReminderForm">
+        <div class="modal-body">
+          <div class="new-reminder-gif-wrapper" style="width: 100%; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-md); border: 2px solid var(--border-subtle); background: #000; margin-bottom: 1.25rem; display: flex; align-items: center; justify-content: center;">
+            <video autoplay loop muted playsinline style="width: 100%; height: auto; max-height: 340px; object-fit: contain; display: block;">
+              <source src="assets/new_reminder_gif.mp4" type="video/mp4">
+              <source src="WhatsApp Video 2026-09-11 at 9.32.42 PM.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="remTitle">Reminder Title</label>
+            <input type="text" id="remTitle" class="form-input" placeholder="What do you want to remember?" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="remDate">Date</label>
+              <input type="date" id="remDate" class="form-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="remTime">Time</label>
+              <input type="time" id="remTime" class="form-input" value="14:00" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="remRepeat">Repeat</label>
+            <select id="remRepeat" class="form-input">
+              <option value="Never">Never</option>
+              <option value="Daily">Daily</option>
+              <option value="Weekly">Weekly</option>
+              <option value="Monthly">Monthly</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Priority</label>
+            <div class="priority-picker">
+              <div class="priority-option" data-priority="low">Low</div>
+              <div class="priority-option selected" data-priority="medium">Medium</div>
+              <div class="priority-option" data-priority="high">High</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="remNotes">Notes (Optional)</label>
+            <textarea id="remNotes" class="form-input" rows="3" placeholder="Add helpful context or details…"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitCreateReminder">
+            Create Reminder
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Forgetting Notification Popup (The Masterpiece) -->
+  <div class="modal-overlay" id="forgettingNotificationModal">
+    <div class="modal-dialog notification-modal">
+      <div class="notif-banner">
+        <div class="notif-bell-icon" id="notifBellIcon">🔔</div>
+        <span class="notif-app-label">Forgetful Reminder</span>
+        <h2 class="notif-headline">Reminder</h2>
+      </div>
+      <div class="notif-body">
+        <div class="notif-task-box" id="notifTaskBox">
+          <div class="notif-task-text" id="notifTaskText">You have something to do.</div>
+          <div class="notif-status-text" id="notifStatusText">Scheduled for now</div>
+        </div>
+        <div class="notif-actions" id="notifActions">
+          <!-- Dynamically populated buttons -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Emergency "Remember" Modal -->
+  <div class="modal-overlay" id="emergencyModal">
+    <div class="modal-dialog" style="max-width: 480px; text-align: center;">
+      <div class="modal-header">
+        <h2 class="modal-title" style="color: var(--danger); font-weight: 800;">
+          🚨 Emergency Diagnostic Protocol
+        </h2>
+        <button class="modal-close-btn" data-modal-close>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 2rem 1.5rem;">
+        <div style="font-size: 2.75rem; margin-bottom: 0.75rem;">🧠⚡</div>
+        <div id="emergencyStageText" style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 1.25rem;">
+          Initializing deep neural memory scan…
+        </div>
+
+        <div style="background-color: var(--bg-surface-subtle); border-radius: var(--radius-full); height: 14px; overflow: hidden; border: 1px solid var(--border-subtle); margin-bottom: 0.5rem;">
+          <div id="emergencyProgressBar" class="scan-bar-active" style="width: 0%; height: 100%; transition: width 0.6s ease;"></div>
+        </div>
+        <div id="emergencyPercentText" style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted);">
+          0%
+        </div>
+
+        <div id="emergencyResultBox" style="display: none; margin-top: 1.5rem; padding: 1.25rem; background-color: var(--bg-surface-subtle); border-radius: var(--radius-lg); border: 1px solid var(--border-subtle);">
+        </div>
+      </div>
+      <div class="modal-footer" id="emergencyFooter" style="display: none; justify-content: center;">
+        <button class="btn btn-secondary" data-modal-close>Okay…</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Snooze Options Modal -->
+  <div class="modal-overlay" id="snoozeModal">
+    <div class="modal-dialog" style="max-width: 420px; text-align: center;">
+      <div class="modal-header">
+        <h2 class="modal-title" style="margin: 0 auto; display: flex; align-items: center; gap: 0.5rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          Remind Me?
+        </h2>
+        <button class="modal-close-btn" data-modal-close>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 1.25rem 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
+        <div class="remind-me-meme-card" style="width: 100%; max-width: 280px; margin: 0 auto; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); border: 2px solid var(--border-subtle); background: #000;">
+          <img src="assets/remind_me_meme.jpg" alt="I am sry beb" style="width: 100%; height: auto; display: block;" />
+        </div>
+        <div style="margin-top: 0.25rem;">
+          <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.25rem;">
+            “I am sry beb…”
+          </h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.4; margin: 0;">
+            You trusted <em>ME</em> to remind you? I can't even remember what you're supposed to be doing right now. 😭💀
+          </p>
+        </div>
+        <p style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); margin-top: 0.25rem; margin-bottom: 0.1rem;">
+          How long should I delay forgetting again?
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 0.45rem; width: 100%;">
+          <button class="btn btn-secondary snooze-option-btn" data-minutes="5">Remind me in 5 minutes (I will forget)</button>
+          <button class="btn btn-secondary snooze-option-btn" data-minutes="10">Remind me in 10 minutes (Still gonna forget)</button>
+          <button class="btn btn-secondary snooze-option-btn" data-minutes="30">Remind me in 30 minutes</button>
+          <button class="btn btn-secondary snooze-option-btn" data-minutes="1440">Remind me tomorrow</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Hackathon Final Presentation Modal -->
+  <div class="modal-overlay" id="finalPresentationModal">
+    <div class="modal-dialog" style="max-width: 500px; text-align: center;">
+      <div class="modal-header">
+        <h2 class="modal-title" style="margin: 0 auto;">🏆 Hackathon Presentation</h2>
+        <button class="modal-close-btn" id="btnDismissFinal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 2.5rem 1.75rem;">
+        <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">💀</div>
+        <h2 style="font-size: 1.85rem; font-weight: 900; color: var(--text-primary); margin-bottom: 0.5rem; line-height: 1.2;">
+          THANK YOU FOR REMINDING ME.
+        </h2>
+        <p style="font-size: 1.15rem; color: var(--danger); font-weight: 700; margin-bottom: 1.25rem;">
+          “Unfortunately, I've already forgotten your project.”
+        </p>
+        
+        <div style="background-color: var(--bg-surface-subtle); border-radius: var(--radius-lg); padding: 1.25rem; border: 1px solid var(--border-subtle); margin-bottom: 1.5rem; text-align: left;">
+          <h4 style="font-size: 1rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.25rem;">
+            Forgetful Reminder
+          </h4>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+            The world's least reliable reminder application.
+          </p>
+          <div style="font-size: 0.95rem; font-style: italic; color: var(--primary); font-weight: 600;">
+            “Why remember when you can forget automatically?”
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap;">
+          <button class="btn btn-secondary" onclick="window.ui.openModal('createReminderModal'); window.demoManager.closeFinalPresentationScreen();">
+            Create Another Reminder
+          </button>
+          <button class="btn btn-demo" id="btnRunDemoAgain">
+            🔄 Run Demo Again
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts in dependency order -->
+  <script src="audio.js"></script>
+  <script src="state.js"></script>
+  <script src="forgetting.js"></script>
+  <script src="emergency.js"></script>
+  <script src="demo.js"></script>
+  <script src="easterEggs.js"></script>
+  <script src="reminders.js"></script>
+  <script src="assistant.js"></script>
+  <script src="ui.js"></script>
+  <script src="catAnimation.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

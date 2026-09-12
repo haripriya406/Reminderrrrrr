@@ -1,0 +1,405 @@
+/* ==========================================================================
+   Forgetful Reminder - Keyframes & Micro-Animations
+   ========================================================================== */
+
+/* Text Amnesia / Blur Effect */
+.blur-amnesia {
+  filter: blur(8px);
+  opacity: 0.25;
+  user-select: none;
+  pointer-events: none;
+  transition: filter 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Comedic Notification Card Shake */
+@keyframes comedicShake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-8px) rotate(-1.5deg); }
+  30% { transform: translateX(7px) rotate(1.5deg); }
+  45% { transform: translateX(-6px) rotate(-1deg); }
+  60% { transform: translateX(5px) rotate(1deg); }
+  75% { transform: translateX(-3px) rotate(-0.5deg); }
+  90% { transform: translateX(2px); }
+}
+
+.shake-animation {
+  animation: comedicShake 0.65s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Tiny Sad Bell Droop Animation */
+@keyframes sadBellDroop {
+  0% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-15deg) scale(1.05); }
+  50% { transform: rotate(10deg); }
+  70% { transform: rotate(-5deg) translateY(4px); }
+  100% { transform: rotate(-25deg) translateY(8px) scale(0.92); opacity: 0.75; }
+}
+
+.bell-sad-droop {
+  animation: sadBellDroop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Gentle Bell Ring (Normal notification) */
+@keyframes bellRing {
+  0%, 100% { transform: rotate(0); }
+  10%, 30%, 50%, 70%, 90% { transform: rotate(14deg); }
+  20%, 40%, 60%, 80% { transform: rotate(-14deg); }
+}
+
+.bell-ringing {
+  animation: bellRing 0.85s ease-in-out;
+}
+
+/* Emergency Scan Progress Bar Pulsing */
+@keyframes scanGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.scan-bar-active {
+  background: linear-gradient(90deg, #ef4444, #f59e0b, #6366f1, #ef4444);
+  background-size: 300% 300%;
+  animation: scanGlow 2s ease infinite;
+}
+
+/* Typing Dots Animation for AI Assistant */
+@keyframes typingBounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+/* Subtle Pulse for Live Badges */
+@keyframes livePulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.18); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.pulse-dot {
+  animation: livePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Fade in for tab content transitions */
+@keyframes fadeInSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tab-pane {
+  display: none;
+}
+
+.tab-pane.active {
+  display: block;
+  animation: fadeInSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Thinking Spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.thinking-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-subtle);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+/* Meme mode ridiculousness */
+.meme-badge {
+  display: inline-block;
+  animation: comedicShake 2.5s infinite;
+}
+
+
+/* ==========================================================================
+   🐈 CAT EASTER EGG — Overlay & Sprite System
+   ========================================================================== */
+
+/* ── Backdrop dim overlay ── */
+.cat-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.42);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* ── Cat sprite container ── */
+.cat-sprite {
+  position: absolute;
+  bottom: 15%;
+  width: clamp(120px, 18vw, 220px);
+  height: auto;
+  will-change: transform, left, opacity;
+  transition: transform 0.3s ease;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,0.5));
+}
+
+.cat-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── Dust cloud container ── */
+.cat-dust {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cat-dust-puff {
+  position: absolute;
+  font-size: clamp(1rem, 2.5vw, 2rem);
+  animation: catDustFade 0.9s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes catDustFade {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-28px) scale(1.8); }
+}
+
+/* ── Running legs animation ── */
+@keyframes catRunLegsFL {
+  0%, 100% { transform: rotate(-25deg) translateY(0); }
+  50%       { transform: rotate(25deg) translateY(-6px); }
+}
+@keyframes catRunLegsFR {
+  0%, 100% { transform: rotate(25deg) translateY(-6px); }
+  50%       { transform: rotate(-25deg) translateY(0); }
+}
+@keyframes catRunLegsBL {
+  0%, 100% { transform: rotate(20deg) translateY(-4px); }
+  50%       { transform: rotate(-20deg) translateY(0); }
+}
+@keyframes catRunLegsBR {
+  0%, 100% { transform: rotate(-20deg) translateY(0); }
+  50%       { transform: rotate(20deg) translateY(-4px); }
+}
+@keyframes catBodyBob {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50%       { transform: translateY(-5px) rotate(1deg); }
+}
+@keyframes catTailWag {
+  0%   { transform: rotate(-5deg);  }
+  25%  { transform: rotate(30deg);  }
+  50%  { transform: rotate(-10deg); }
+  75%  { transform: rotate(35deg);  }
+  100% { transform: rotate(-5deg);  }
+}
+
+.cat-running .cat-svg {
+  animation: catBodyBob 0.22s ease-in-out infinite;
+}
+.cat-running .cat-leg-fl {
+  transform-origin: 41px 148px;
+  animation: catRunLegsFL 0.22s ease-in-out infinite;
+}
+.cat-running .cat-leg-fr {
+  transform-origin: 99px 148px;
+  animation: catRunLegsFR 0.22s ease-in-out infinite;
+}
+.cat-running .cat-leg-bl {
+  transform-origin: 23px 144px;
+  animation: catRunLegsBL 0.22s ease-in-out infinite;
+}
+.cat-running .cat-leg-br {
+  transform-origin: 117px 144px;
+  animation: catRunLegsBR 0.22s ease-in-out infinite;
+}
+.cat-running .cat-tail-group {
+  transform-origin: 102px 120px;
+  animation: catTailWag 0.35s ease-in-out infinite;
+}
+
+/* Flips the cat to face right for the escape */
+.cat-facing-right .cat-svg {
+  transform: scaleX(-1);
+}
+
+/* ── Head Tilt (quick) ── */
+@keyframes catHeadTilt {
+  0%   { transform: rotate(0deg); }
+  30%  { transform: rotate(12deg); }
+  60%  { transform: rotate(-6deg); }
+  100% { transform: rotate(8deg); }
+}
+.cat-head-tilt .cat-svg {
+  animation: catHeadTilt 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ── Head Tilt slow (confused) ── */
+@keyframes catHeadTiltSlow {
+  0%   { transform: rotate(0deg); }
+  40%  { transform: rotate(-14deg); }
+  70%  { transform: rotate(10deg); }
+  100% { transform: rotate(-10deg); }
+}
+.cat-head-tilt-slow .cat-svg {
+  animation: catHeadTiltSlow 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ── Happy bounce ── */
+@keyframes catHappyBounce {
+  0%   { transform: translateY(0) scale(1); }
+  20%  { transform: translateY(-18px) scale(1.05); }
+  40%  { transform: translateY(0) scale(0.97); }
+  60%  { transform: translateY(-10px) scale(1.03); }
+  80%  { transform: translateY(0) scale(0.99); }
+  100% { transform: translateY(-4px) scale(1.01); }
+}
+.cat-happy-bounce {
+  animation: catHappyBounce 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ── Screen shake (comedic) ── */
+@keyframes catScreenShake {
+  0%   { transform: translate(0, 0) rotate(0); }
+  10%  { transform: translate(-6px, -3px) rotate(-0.8deg); }
+  20%  { transform: translate(7px, 3px) rotate(0.8deg); }
+  30%  { transform: translate(-5px, -2px) rotate(-0.5deg); }
+  40%  { transform: translate(5px, 2px) rotate(0.5deg); }
+  50%  { transform: translate(-4px, -1px) rotate(-0.3deg); }
+  60%  { transform: translate(3px, 1px) rotate(0.3deg); }
+  70%  { transform: translate(-2px, 0) rotate(0); }
+  80%  { transform: translate(2px, 0) rotate(0); }
+  90%  { transform: translate(-1px, 0); }
+  100% { transform: translate(0, 0); }
+}
+.cat-screen-shake {
+  animation: catScreenShake 0.75s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* ── Speech Bubble ── */
+.cat-bubble {
+  position: absolute;
+  bottom: calc(15% + clamp(90px, 14vw, 175px));
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: min(90vw, 520px);
+  min-width: 200px;
+  text-align: center;
+  padding: 0.8rem 1.4rem;
+  border-radius: 18px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(0.85rem, 2.2vw, 1.15rem);
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.96);
+  color: #1a1a2e;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+  border: 2.5px solid rgba(255,255,255,0.8);
+  opacity: 0;
+  transition: opacity 0.35s ease, background 0.4s ease, color 0.4s ease;
+  pointer-events: none;
+  line-height: 1.45;
+  /* Tail triangle */
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+}
+
+/* Variants */
+.cat-bubble--running  { background: #6366f1; color: white; border-color: #818cf8; }
+.cat-bubble--happy    { background: #10b981; color: white; border-color: #34d399; }
+.cat-bubble--think    { background: #f59e0b; color: #1a1a2e; border-color: #fcd34d; }
+.cat-bubble--skull    {
+  background: #1a1a2e;
+  color: #ef4444;
+  border-color: #ef4444;
+  font-size: clamp(1rem, 2.8vw, 1.4rem);
+  letter-spacing: 0.04em;
+  animation: skullPulse 0.4s ease;
+}
+.cat-bubble--embarrassed { background: #fda4af; color: #1a1a2e; border-color: #fb7185; }
+.cat-bubble--ghost    {
+  background: rgba(30,30,50,0.92);
+  color: #c4b5fd;
+  border-color: #7c3aed;
+  font-style: italic;
+}
+
+@keyframes skullPulse {
+  0%   { transform: translateX(-50%) scale(0.8); opacity: 0.5; }
+  60%  { transform: translateX(-50%) scale(1.08); }
+  100% { transform: translateX(-50%) scale(1); opacity: 1; }
+}
+
+/* ── Meme Banner ── */
+.cat-meme-banner {
+  position: absolute;
+  top: 12%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.6);
+  max-width: min(92vw, 600px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1.2rem 2rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+  border: 3px solid #ef4444;
+  box-shadow: 0 0 0 6px rgba(239,68,68,0.25), 0 20px 60px rgba(0,0,0,0.7);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cat-meme-banner.cat-meme-visible {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+.cat-meme-emoji {
+  font-size: clamp(2rem, 5vw, 3rem);
+  flex-shrink: 0;
+}
+.cat-meme-text {
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-size: clamp(1.3rem, 4vw, 2.2rem);
+  font-weight: 900;
+  color: white;
+  text-align: center;
+  line-height: 1.15;
+  text-shadow: 2px 2px 0 #ef4444, -2px -2px 0 #ef4444, 2px -2px 0 #ef4444, -2px 2px 0 #ef4444;
+  letter-spacing: 0.03em;
+  animation: memeTextShake 0.5s ease;
+}
+@keyframes memeTextShake {
+  0%  { transform: scale(1.4) rotate(-3deg); opacity: 0; }
+  50% { transform: scale(0.95) rotate(2deg); opacity: 1; }
+  100%{ transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* ── Responsive tweaks ── */
+@media (max-width: 480px) {
+  .cat-bubble {
+    font-size: 0.82rem;
+    padding: 0.6rem 1rem;
+    border-radius: 12px;
+  }
+  .cat-meme-text {
+    font-size: 1.1rem;
+  }
+  .cat-meme-emoji {
+    font-size: 1.6rem;
+  }
+}
